@@ -3,11 +3,16 @@ import gql from "graphql-tag";
 export const typeDefs = gql`
     type Query {
         findUserById(id : ID!) : UserSummary
+        findArticles: [Article!]
+        findArticleById(id: ID!) : Article
     }
 
     type Mutation {
         createUser(username: String!, password: String!): CreateUserResponse!
         signIn(username: String!, password: String!): SignInResponse!
+        createArticle(title: String, content: String!): CreateArticleResponse!
+        updateArticle(id: ID!): UpdateArticleResponse!
+        deleteArticle(id: ID!): DeleteArticleResponse!
         deleteArticleDislike(articleId: ID!, userId: ID!): Dislike
         deleteCommentDislike(commentId: ID!, userId: ID!): Dislike
         addArticleDislike(articleId: ID!, userId: ID!): Dislike
@@ -33,7 +38,22 @@ export const typeDefs = gql`
         message: String!
         token: String
     }
-
+    type CreateArticleResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+        article: Article
+    }
+    type UpdateArticleResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+    }
+    type DeleteArticleResponse {
+        code: Int!
+        success: Boolean!
+        message: String!
+    }
     type User {
         id : ID!
         username : String!
@@ -41,7 +61,7 @@ export const typeDefs = gql`
         comments : [Comment]
         dislikes : [Dislike]
         bio : String
-        createdAt : String!
+        createdAt : String
     }
 
     type Dislike{
@@ -53,7 +73,7 @@ export const typeDefs = gql`
 
     type Article {  
         id : ID!
-        title : String!
+        title : String
         content : String!
         author : User!
         dislikes : [Dislike]

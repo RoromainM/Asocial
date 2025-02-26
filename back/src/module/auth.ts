@@ -18,8 +18,9 @@ export const getUser = (token: string): AuthenticatedUser | null => {
   try {
     const payload =  jwt.verify(token, process.env.JWT_SECRET as string) as AuthenticatedUser
     return payload
-  } catch {
-    return null
+  } catch (err) {
+      console.error('Error verifying token:', err);
+    return null;
   }
 }
 

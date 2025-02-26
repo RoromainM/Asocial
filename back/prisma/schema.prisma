@@ -41,6 +41,9 @@ model Article {
   author   User   @relation(fields: [authorId], references: [id])
   authorId String
   likes    Dislike[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime?
+  comment Comment[]
 }
 
 model Comment {
@@ -49,4 +52,6 @@ model Comment {
   author   User   @relation(fields: [authorId], references: [id])
   authorId String
   likes    Dislike[]
+  article Article @relation(fields: [articleId], references: [id])
+  articleId String
 }

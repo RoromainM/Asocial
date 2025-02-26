@@ -5,12 +5,22 @@ import { WithRequired } from "../../utils/mapped-type.js";
 
 export const deleteArticleDislike: NonNullable<MutationResolvers['deleteArticleDislike']> = async (_, {articleId, userId}, {dataSources: {db}}) => {
     try {
-        const dislike = await db.articleDislike.deleteOne({
+        const dislike = await db.dislike.findFirst({
             where: {
                 articleId,
                 userId
             }
-        });
+        })
+
+        if (!dislike) {
+            throw new Error('Dislike not found')
+        }
+        
+        await db.dislike.delete({
+            where: {
+                id: dislike.id
+            }
+        })
 
         return dislike;
     } catch {
@@ -20,7 +30,7 @@ export const deleteArticleDislike: NonNullable<MutationResolvers['deleteArticleD
 
 export const addArticleDislike: NonNullable<MutationResolvers['addArticleDislike']> = async (_, {articleId, userId}, {dataSources: {db}}) => {
     try {
-        const dislike = await db.articleDislike.create({
+        const dislike = await db.dislike.create({
             data: {
                 articleId,
                 userId
@@ -38,12 +48,12 @@ export const addArticleDislike: NonNullable<MutationResolvers['addArticleDislike
 
 export const deleteCommentDislike: NonNullable<MutationResolvers['deleteCommentDislike']> = async (_, {commentId, userId}, {dataSources: {db}}) => {
     try {
-        const dislike = await db.commentDislike.deleteOne({
+        const dislike = await db.dislike.findFirst({
             where: {
                 commentId,
                 userId
             }
-        });
+        })
 
         return dislike;
     } catch {
@@ -53,7 +63,7 @@ export const deleteCommentDislike: NonNullable<MutationResolvers['deleteCommentD
 
 export const addCommentDislike: NonNullable<MutationResolvers['addCommentDislike']> = async (_, {commentId, userId}, {dataSources: {db}}) => {
     try {
-        const dislike = await db.commentDislike.create({
+        const dislike = await db.dislike.create({
             data: {
                 commentId,
                 userId
